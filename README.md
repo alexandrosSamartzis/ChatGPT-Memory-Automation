@@ -48,25 +48,24 @@ ChatGPT-Memory-Automation/
 
 1. **Clone the Repository**
 
-   ```bash
-   git clone https://github.com/yourusername/chatgpt-memory-automation.git
-   cd chatgpt-memory-automation
+```bash
+    git clone https://github.com/yourusername/chatgpt-memory-automation.git
+    cd chatgpt-memory-automation
+```
 
-   2.	Create a Conda Environment
-   ```
+2. Create a Conda Environment
+   conda create -n chatgpt_memory_cleansing python=3.10
+   conda activate chatgpt_memory_cleansing
 
-conda create -n chatgpt_memory_cleansing python=3.10
-conda activate chatgpt_memory_cleansing
-
-    3.	Install Required Packages
+3. Install Required Packages
 
 pip install -r requirements.txt
 
-    4.	Initialize the Database
+4. Initialize the Database
 
 python database/init_db.py
 
-    5.	Run the App
+5. Run the App
 
 streamlit run app.py
 
