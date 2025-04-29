@@ -1,8 +1,11 @@
 # database/init_db.py
-
 import sqlite3
 from pathlib import Path
+import sys
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 from config import DB_PATH
+
 
 def initialize_database():
     # Make sure the database folder exists
@@ -30,6 +33,7 @@ def initialize_database():
     conn.commit()
     conn.close()
     print(f"✅ Database initialized at {DB_PATH}")
+
 
 if __name__ == "__main__":
     initialize_database()
