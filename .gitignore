@@ -5,3 +5,4 @@ __pycache__/
 memory/*.txt
 memory/*.json
 memory/*.md
+.sh
