@@ -2,9 +2,9 @@
 import sqlite3
 from pathlib import Path
 import sys
+from config import DB_PATH
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from config import DB_PATH
 
 
 def initialize_database():

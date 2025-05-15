@@ -4,3 +4,4 @@ __pycache__/
 *.db
 memory/*.txt
 memory/*.json
+memory/*.md
