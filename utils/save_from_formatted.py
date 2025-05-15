@@ -1,5 +1,9 @@
 import re
-from save_memory import save_memory
+import sys
+from pathlib import Path
+from utils.save_memory import save_memory
+
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 
 def extract_field(text, pattern):

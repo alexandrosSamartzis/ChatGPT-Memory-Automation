@@ -3,9 +3,9 @@
 import sqlite3
 import sys
 from pathlib import Path
+from config import DB_PATH
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-from config import DB_PATH
 
 
 def search_by_keyword(keyword):
