@@ -6,7 +6,6 @@ from utils.save_from_formatted import save_from_formatted_summary
 from utils.search_memory import search_by_keyword
 import os
 
-
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 st.set_page_config(page_title="🧠 ChatGPT Memory Assistant", layout="wide")
