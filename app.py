@@ -3,7 +3,9 @@ from pathlib import Path
 import sys
 import streamlit as st
 from utils.save_from_formatted import save_from_formatted_summary
-from utils.search_memory import search_by_keyword
+from utils.search_memory import search_by_keyword, search_by_multiple_keywords
+from utils.tag_index import get_tag_and_word_index
+
 import os
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
@@ -15,18 +17,75 @@ st.title("🧠 ChatGPT Memory Automation")
 # 📋 SIDEBAR SEARCH
 # ────────────────────────────────────────────────────────────────
 
-st.sidebar.header("🔍 Search Memory")
-keyword = st.sidebar.text_input("Search by keyword")
 
-if keyword:
-    results = search_by_keyword(keyword)
-    st.subheader("🔎 Search Results")
+st.sidebar.header("🔍 Smart Search")
+
+tags, words = get_tag_and_word_index()
+
+search_input = st.sidebar.text_input(
+    "Search (use comma to combine)", placeholder="e.g. streamlit, summary"
+)
+
+if st.sidebar.button("🔠 Show All Tags & Words"):
+    with st.sidebar.expander("📚 Available Terms"):
+        st.markdown("**Tags:**  \n" + ", ".join(tags))
+        st.markdown("---")
+        st.markdown("**Keywords:**  \n" + ", ".join(words))
+
+
+if search_input:
+    search_terms = [t.strip().lower() for t in search_input.split(",") if t.strip()]
+
+    if len(search_terms) == 1:
+        results = search_by_keyword(search_terms[0])
+    else:
+        results = search_by_multiple_keywords(search_terms)
+
     for row in results:
-        st.markdown(f"### 🧠 {row[1]} ({row[2]})")
-        st.markdown(f"**Purpose**: {row[3]}")
-        st.markdown(f"**Tags**: `{row[4]}`")
-        with st.expander("📝 Summary"):
-            st.markdown(row[6])
+
+        try:
+            memory_id, title, date, purpose, tags, filepath, summary, created_at = row
+        except ValueError:
+            st.warning("Skipping malformed row.")
+            continue
+        st.markdown(f"### 🧠 {title}  \n📅 *{date}*")
+        st.markdown(f"**Purpose:** {purpose}")
+        st.markdown(f"**Tags:** `{tags}`")
+
+        with st.expander("📝 View Full Summary"):
+            st.markdown(summary)
+
+        if st.button(f"📋 Use this memory", key=f"use-{memory_id}"):
+            st.session_state["selected_memory"] = row
+            st.success(f"Loaded memory: {title}")
+
+with st.sidebar.expander("ℹ️ Search Rules"):
+    st.markdown(
+        """
+**How to search:**
+- Type any word or tag: `streamlit`
+- Use comma to combine up to 3: `azure, identity, pricing`
+- Click 'Show All Tags' to explore your memory dictionary
+"""
+    )
+
+
+st.divider()
+
+# ────────────────────────────────────────────────────────────────
+# 📥 MEMORY Presentation
+# ────────────────────────────────────────────────────────────────
+
+if "selected_memory" in st.session_state:
+    memory = st.session_state["selected_memory"]
+    st.subheader("🎯 Selected Memory")
+
+    st.markdown(f"### 🧠 {memory[1]}")
+    st.markdown(f"**Date:** {memory[2]}")
+    st.markdown(f"**Tags:** `{memory[4]}`")
+    st.markdown(f"**Purpose:** {memory[3]}")
+    st.markdown("---")
+    st.markdown(memory[6])
 
 st.divider()
 

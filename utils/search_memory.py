@@ -55,3 +55,18 @@ def search_by_date_range(start_date, end_date):
     results = cursor.fetchall()
     conn.close()
     return results
+
+
+def search_by_multiple_keywords(keywords):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    conditions = " OR ".join(
+        ["title LIKE ? OR purpose LIKE ? OR summary LIKE ?" for _ in keywords]
+    )
+    patterns = [f"%{k}%" for k in keywords for _ in range(3)]
+
+    cursor.execute(f"SELECT * FROM memory_shards WHERE {conditions}", patterns)
+    results = cursor.fetchall()
+    conn.close()
+    return results
