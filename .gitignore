@@ -5,3 +5,6 @@ __pycache__/
 memory/*.txt
 memory/*.json
 memory/*.md
+database/
+!database/.gitkeep  
+
